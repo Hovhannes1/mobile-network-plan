@@ -1831,11 +1831,23 @@ function toggleStartMobileMovementButton(showIt) {
     }
 }
 
+function toggleMobileOnOffButton(showIt) {
+    // check mobileOnOff button has path-action-visible class and remove it
+    if (document.getElementById("mobileDataOnOff").classList.contains("path-action-visible") && !showIt) {
+        document.getElementById("mobileDataOnOff").classList.remove("path-action-visible");
+    }
+    // check mobileOnOff button has path-action-visible class and add it
+    if (!document.getElementById("mobileDataOnOff").classList.contains("path-action-visible") && showIt) {
+        document.getElementById("mobileDataOnOff").classList.add("path-action-visible");
+    }
+}
+
 function onCratePathClick() {
     modeclick = 5;
 
     toggleStartMobileMovementButton(false);
     togglePauseMobileMovementButton(false);
+    toggleMobileOnOffButton(false);
 
     //add vissible class to additional buttons
     document
@@ -1864,6 +1876,7 @@ let pathCreationInprogress = false;
 let isRestarting = false;
 let isPaused = false;
 let currentCheckPointIndex;
+let mobileDataEnabled = true;
 
 function createPathPoint(location) {
     // check if not out of polygon bounds
@@ -2013,6 +2026,7 @@ async function startMobileMovement() {
     }
     // show togglePauseMobileMovementButton
     togglePauseMobileMovementButton(true);
+    toggleMobileOnOffButton(true);
     // start marker moving
     isRestarting = false;
     isPaused = false;
@@ -2084,21 +2098,24 @@ async function moveMobile() {
             startPointMobile.setLatLng([newLat, newLng]);
         }
 
-        // check where is the marker on cellHandoverMatrix
-        let antennaIndex = getCellIndex(startPointMobile.getLatLng());
-        if (antennaIndex !== -1) {
-            // check if the line is already on the map and remove it
-            if (mobileToAntennaLine) pathScreenGroup.removeLayer(mobileToAntennaLine);
+        // check if mobile data is turned on then connect to antenna
+        if (mobileDataEnabled) {
+            // check where is the marker on cellHandoverMatrix
+            let antennaIndex = getCellIndex(startPointMobile.getLatLng());
+            if (antennaIndex !== -1) {
+                // check if the line is already on the map and remove it
+                if (mobileToAntennaLine) pathScreenGroup.removeLayer(mobileToAntennaLine);
 
-            // create a line connecting the mobile to antenna
-            let antennaPos = [antennas[antennaIndex].location.lat, antennas[antennaIndex].location.lng];
-            mobileToAntennaLine = L.polyline([startPointMobile.getLatLng(), antennaPos], {color: 'red'});
+                // create a line connecting the mobile to antenna
+                let antennaPos = [antennas[antennaIndex].location.lat, antennas[antennaIndex].location.lng];
+                mobileToAntennaLine = L.polyline([startPointMobile.getLatLng(), antennaPos], {color: 'red'});
 
-            // add mobileToAntennaLine to pathScreenGroup
-            pathScreenGroup.addLayer(mobileToAntennaLine);
-        }
-        if (antennaIndex === -1) {
-            if (mobileToAntennaLine) pathScreenGroup.removeLayer(mobileToAntennaLine);
+                // add mobileToAntennaLine to pathScreenGroup
+                pathScreenGroup.addLayer(mobileToAntennaLine);
+            }
+            if (antennaIndex === -1) {
+                if (mobileToAntennaLine) pathScreenGroup.removeLayer(mobileToAntennaLine);
+            }
         }
 
         // delay the movement of the mobile marker
@@ -2116,6 +2133,7 @@ async function moveMobile() {
         if (mobileToAntennaLine) pathScreenGroup.removeLayer(mobileToAntennaLine);
         // show togglePauseMobileMovementButton
         togglePauseMobileMovementButton(false);
+        toggleMobileOnOffButton(false);
     }
 }
 
@@ -2126,6 +2144,13 @@ async function pauseMobileMovement() {
         // continue moving the marker
         await moveMobile();
     }
+}
+
+// function to toggle mobile data on off
+function toggleMobileData() {
+    mobileDataEnabled = !mobileDataEnabled;
+    // check if the line is already on the map and remove it
+    if (mobileToAntennaLine) pathScreenGroup.removeLayer(mobileToAntennaLine);
 }
 
 //google.maps.event.addDomListener(window, 'load', initialize);
