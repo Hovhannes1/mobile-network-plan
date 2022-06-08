@@ -2118,6 +2118,10 @@ async function moveMobile() {
             }
         }
 
+        if(!mobileDataEnabled) {
+            if (mobileToAntennaLine) pathScreenGroup.removeLayer(mobileToAntennaLine);
+        }
+
         // delay the movement of the mobile marker
         await timer(100);
     }
@@ -2149,8 +2153,6 @@ async function pauseMobileMovement() {
 // function to toggle mobile data on off
 function toggleMobileData() {
     mobileDataEnabled = !mobileDataEnabled;
-    // check if the line is already on the map and remove it
-    if (mobileToAntennaLine) pathScreenGroup.removeLayer(mobileToAntennaLine);
 }
 
 //google.maps.event.addDomListener(window, 'load', initialize);
