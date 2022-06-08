@@ -1863,6 +1863,7 @@ let startPointMobile;
 let pathCreationInprogress = false;
 let isRestarting = false;
 let isPaused = false;
+let currentCheckPointIndex;
 
 function createPathPoint(location) {
     // check if not out of polygon bounds
@@ -1997,8 +1998,8 @@ function getCellIndex(location) {
 
 // move the mobile marker with a constant speed  through the pathPolylinePoints
 async function startMobileMovement() {
-    // initial checkpoint index
-    let index = 0;
+    // initial checkpoint currentCheckPointIndex
+    currentCheckPointIndex = 0;
     // check if marker already moving stop it and reposition
     if (!isRestarting) {
         //set isRestarting to true
@@ -2015,6 +2016,13 @@ async function startMobileMovement() {
     // start marker moving
     isRestarting = false;
     isPaused = false;
+
+    // move the marker
+    await moveMobile()
+}
+
+// move mobile function
+async function moveMobile() {
     // create a line connecting the mobile to antenna
     let mobileToAntennaLine;
     // calculate the avarage speed
@@ -2028,12 +2036,15 @@ async function startMobileMovement() {
         pathPolylinePoints[pathPolylinePoints.length - 1][1]
         ) {
         // check if marker not moving stop the loop
-        if (isRestarting || isPaused) break;
+        if (isRestarting || isPaused) {
+            if (mobileToAntennaLine) pathScreenGroup.removeLayer(mobileToAntennaLine);
+            break;
+        }
         // calculate dx and dy from startPointMobile to the next point
         let dx =
-            pathPolylinePoints[index + 1][0] - startPointMobile.getLatLng().lat;
+            pathPolylinePoints[currentCheckPointIndex + 1][0] - startPointMobile.getLatLng().lat;
         let dy =
-            pathPolylinePoints[index + 1][1] - startPointMobile.getLatLng().lng;
+            pathPolylinePoints[currentCheckPointIndex + 1][1] - startPointMobile.getLatLng().lng;
 
         // calculate the angle of the line
         let angle = Math.atan2(dy, dx);
@@ -2045,11 +2056,11 @@ async function startMobileMovement() {
         //the distance between the current possition and the next checkpoint
         let distanceBetweenInitialPosAndCheckpoint = Math.sqrt(
             Math.pow(
-                startPointMobile.getLatLng().lat - pathPolylinePoints[index + 1][0],
+                startPointMobile.getLatLng().lat - pathPolylinePoints[currentCheckPointIndex + 1][0],
                 2
             ) +
             Math.pow(
-                startPointMobile.getLatLng().lng - pathPolylinePoints[index + 1][1],
+                startPointMobile.getLatLng().lng - pathPolylinePoints[currentCheckPointIndex + 1][1],
                 2
             )
         );
@@ -2063,11 +2074,11 @@ async function startMobileMovement() {
         ) {
             // move the marker to the next checkpoint
             startPointMobile.setLatLng([
-                pathPolylinePoints[index + 1][0],
-                pathPolylinePoints[index + 1][1],
+                pathPolylinePoints[currentCheckPointIndex + 1][0],
+                pathPolylinePoints[currentCheckPointIndex + 1][1],
             ]);
-            //increase the index
-            index++;
+            //increase the currentCheckPointIndex
+            currentCheckPointIndex++;
         } else {
             // move the mobile marker to new possition
             startPointMobile.setLatLng([newLat, newLng]);
@@ -2105,7 +2116,6 @@ async function startMobileMovement() {
         if (mobileToAntennaLine) pathScreenGroup.removeLayer(mobileToAntennaLine);
         // show togglePauseMobileMovementButton
         togglePauseMobileMovementButton(false);
-
     }
 }
 
@@ -2113,7 +2123,8 @@ async function pauseMobileMovement() {
     await timer(150);
     isPaused = !isPaused;
     if (!isPaused) {
-        await startMobileMovement();
+        // continue moving the marker
+        await moveMobile();
     }
 }
 
