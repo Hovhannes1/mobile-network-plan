@@ -1809,8 +1809,33 @@ function mapHandover() {
     }
 }
 
+function togglePauseMobileMovementButton(showIt) {
+    // check pauseMobileMovement button has path-action-visible class and remove it
+    if (document.getElementById("pauseMobileMovement").classList.contains("path-action-visible") && !showIt) {
+        document.getElementById("pauseMobileMovement").classList.remove("path-action-visible");
+    }
+    // check pauseMobileMovement button has path-action-visible class and add it
+    if (!document.getElementById("pauseMobileMovement").classList.contains("path-action-visible") && showIt) {
+        document.getElementById("pauseMobileMovement").classList.add("path-action-visible");
+    }
+}
+
+function toggleStartMobileMovementButton(showIt) {
+    // check startMobileMovement button has path-action-visible class and remove it
+    if (document.getElementById("startMobileMovement").classList.contains("path-action-visible") && !showIt) {
+        document.getElementById("startMobileMovement").classList.remove("path-action-visible");
+    }
+    // check startMobileMovement button has path-action-visible class and add it
+    if (!document.getElementById("startMobileMovement").classList.contains("path-action-visible") && showIt) {
+        document.getElementById("startMobileMovement").classList.add("path-action-visible");
+    }
+}
+
 function onCratePathClick() {
     modeclick = 5;
+
+    toggleStartMobileMovementButton(false);
+    togglePauseMobileMovementButton(false);
 
     //add vissible class to additional buttons
     document
@@ -1828,17 +1853,6 @@ function onCratePathClick() {
     //start creation process
     pathCreationInprogress = true;
 
-    // check if start mobile movement button is visible and hide it
-    if (
-        document
-            .getElementById("startMobileMovement")
-            .classList.contains("path-action-visible")
-    ) {
-        // hide it
-        document
-            .getElementById("startMobileMovement")
-            .classList.remove("path-action-visible");
-    }
 }
 
 // setup for path creation
@@ -1847,7 +1861,8 @@ let pathPolylinePoints = [];
 let pathPolyline;
 let startPointMobile;
 let pathCreationInprogress = false;
-let isMobileMoving = false;
+let isRestarting = false;
+let isPaused = false;
 
 function createPathPoint(location) {
     // check if not out of polygon bounds
@@ -1920,9 +1935,7 @@ function finishPathCreation() {
     document.getElementById("createPath").classList.remove("pulse-button");
 
     // show startMobileMovement button
-    document
-        .getElementById("startMobileMovement")
-        .classList.add("path-action-visible");
+    toggleStartMobileMovementButton(true);
 }
 
 function cancelPathCreation() {
@@ -1987,9 +2000,9 @@ async function startMobileMovement() {
     // initial checkpoint index
     let index = 0;
     // check if marker already moving stop it and reposition
-    if (isMobileMoving) {
-        //set isMobileMoving to false
-        isMobileMoving = false;
+    if (!isRestarting) {
+        //set isRestarting to true
+        isRestarting = true;
         // move the marker to the start point
         await timer(500);
         startPointMobile.setLatLng([
@@ -1997,8 +2010,11 @@ async function startMobileMovement() {
             pathPolylinePoints[0][1],
         ]);
     }
+    // show togglePauseMobileMovementButton
+    togglePauseMobileMovementButton(true);
     // start marker moving
-    isMobileMoving = true;
+    isRestarting = false;
+    isPaused = false;
     // create a line connecting the mobile to antenna
     let mobileToAntennaLine;
     // calculate the avarage speed
@@ -2012,7 +2028,7 @@ async function startMobileMovement() {
         pathPolylinePoints[pathPolylinePoints.length - 1][1]
         ) {
         // check if marker not moving stop the loop
-        if (!isMobileMoving) break;
+        if (isRestarting || isPaused) break;
         // calculate dx and dy from startPointMobile to the next point
         let dx =
             pathPolylinePoints[index + 1][0] - startPointMobile.getLatLng().lat;
@@ -2076,6 +2092,28 @@ async function startMobileMovement() {
 
         // delay the movement of the mobile marker
         await timer(100);
+    }
+
+    //check if the mobile marker is at the end of the path
+    if (
+        startPointMobile.getLatLng().lat ===
+        pathPolylinePoints[pathPolylinePoints.length - 1][0] &&
+        startPointMobile.getLatLng().lng ===
+        pathPolylinePoints[pathPolylinePoints.length - 1][1]
+    ) {
+        // check if the line is already on the map and remove it
+        if (mobileToAntennaLine) pathScreenGroup.removeLayer(mobileToAntennaLine);
+        // show togglePauseMobileMovementButton
+        togglePauseMobileMovementButton(false);
+
+    }
+}
+
+async function pauseMobileMovement() {
+    await timer(150);
+    isPaused = !isPaused;
+    if (!isPaused) {
+        await startMobileMovement();
     }
 }
 

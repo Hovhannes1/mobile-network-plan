@@ -4,490 +4,456 @@
 
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <meta charset="utf-8" />
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <meta charset="utf-8"/>
 
     <title>Mobile Network Optimization Tool</title>
-    <link rel="shortcut icon" type="image/x-icon" href="icon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="icon.ico"/>
 
     <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
-      integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-      crossorigin=""
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+            integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+            crossorigin=""
     />
     <script
-      src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-      integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-      crossorigin=""
+            src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+            integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+            crossorigin=""
     ></script>
     <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"
     />
     <script src="https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.js"></script>
     <script src="leaflet-tilelayer-colorpicker.js"></script>
     <script src="leaflet-tilelayer-colorpicker.js"></script>
     <link
-      href="https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.css"
-      rel="stylesheet"
+            href="https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.css"
+            rel="stylesheet"
     />
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
     <link
-      href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css"
-      rel="stylesheet"
+            href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css"
+            rel="stylesheet"
     />
     <script src="jquery-3.6.0.js"></script>
     <script src="https://npmcdn.com/leaflet-geometryutil"></script>
-    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <link rel="stylesheet" type="text/css" href="styles.css"/>
     <style>
-      html,
-      body,
-      #map-canvas {
-        height: 100%;
-        margin: 0px;
-        padding: 0px;
-      }
+        html,
+        body,
+        #map-canvas {
+            height: 100%;
+            margin: 0px;
+            padding: 0px;
+        }
     </style>
     <style type="text/css">
-      body {
-        background-color: #ffffff;
-        color: #000000;
-        font-family: Arial;
-        font-size: 13px;
-        margin: 0;
-        padding: 0;
-      }
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: Arial;
+            font-size: 13px;
+            margin: 0;
+            padding: 0;
+        }
     </style>
 
     <style type="text/css">
-      #header {
-        background-color: #ffd700;
-        width: 100%;
-      }
-      #footer {
-        background-color: #ffd700;
-        width: 100%;
-      }
+        #header {
+            background-color: #ffd700;
+            width: 100%;
+        }
 
-      #Combobox1 {
-        border: 1px #a9a9a9 solid;
-        background-color: #ffffff;
-        color: #000000;
-        font-family: Arial;
-        font-size: 13px;
-      }
+        #footer {
+            background-color: #ffd700;
+            width: 100%;
+        }
 
-      #message {
-        border: 0px #a9a9a9 solid;
-        background-color: #ffd700;
-        font-family: Arial;
-        font-size: 13px;
-      }
+        #Combobox1 {
+            border: 1px #a9a9a9 solid;
+            background-color: #ffffff;
+            color: #000000;
+            font-family: Arial;
+            font-size: 13px;
+        }
+
+        #message {
+            border: 0px #a9a9a9 solid;
+            background-color: #ffd700;
+            font-family: Arial;
+            font-size: 13px;
+        }
     </style>
 
     <script src="jquery.min.js"></script>
     <script src="main.js"></script>
-  </head>
-  <body>
-    <div id="conteneur" class="container">
-      <div id="header" class="header">
+</head>
+<body>
+<div id="conteneur" class="container">
+    <div id="header" class="header">
         <div>
-          <input
-            type="text"
-            style="width: 400px"
-            id="message"
-            value="Select the south-west corner the deployment area !"
-            readonly
-          />
+            <input
+                    type="text"
+                    style="width: 400px"
+                    id="message"
+                    value="Select the south-west corner the deployment area !"
+                    readonly
+            />
         </div>
-      </div>
+    </div>
 
-      <div class="inner">
+    <div class="inner">
         <div id="sidebar" class="sidebar">
-          <div><label id="labeltech">Radio technogy: </label></div>
-          <select class="select" name="Combobox1" size="1" id="techno">
-            <option selected value="1">GSM</option>
-            <option value="2">UMTS</option>
-            <option value="3">LTE</option>
-            <option value="4">TDF</option>
-            <option value="5">HSDPA</option>
-            <option value="6">WiMAX</option>
-          </select>
-          <div>
-            <label id="labelfrequencySpectrum" style="width: 50%"
-              >Band(Mhz) : </label
-            ><input
-              type="number"
-              class="number-input"
-              id="frequencySpectrum"
-              name="frequencySpectrum"
-              value="1800"
-              align="right"
-              style="width: 50%"
-            />
-          </div>
-          <div>
-            <label id="labelqualityThreshold" style="width: 50%"
-              >Quality Threshold (Db) : </label
-            ><input
-              type="number"
-              class="number-input"
-              id="qualityThreshold"
-              name="qualityThreshold"
-              value="-100"
-              style="width: 50%"
-            />
-          </div>
-          <div>
-            <label id="labelareaHeight " style="width: 30%"
-              >Area Height (10m) : </label
-            ><input
-              type="number"
-              class="number-input"
-              id="areaHeight "
-              name="areaHeight "
-              value="200"
-              style="width: 20%"
-            />
-          </div>
-          <div>
-            <label id="labelareaWidth " style="width: 30%"
-              >Area Width (10m) : </label
-            ><input
-              type="number"
-              class="number-input"
-              id="areaWidth "
-              name="areaWidth "
-              value="200"
-              style="width: 20%"
-            />
-          </div>
-          <div><label id="labelmodele">Propagation model: </label></div>
-          <select
-            class="select"
-            name="Combobox1"
-            size="1"
-            id="methode"
-            onchange="choixenv()"
-          >
-            <option selected value="1">Single Knife Edge (rural)</option>
-            <option value="2">Bullington (rural)</option>
-            <option value="3">Epstein Method</option>
-            <option value="4">Deygout (rural)</option>
-            <option value="5">Causebrook</option>
-            <option value="6">Okumura</option>
-            <option value="7">Okumura-Hata</option>
-            <option value="8">COST231-Hata (rural,urban)</option>
-            <option value="9">Walfisch-Ikegami(urban)</option>
-            <option value="10">Stanford University Interim</option>
-          </select>
-          <div>
-            <input
-              type="button"
-              class="btn"
-              id="cartepower"
-              value="Cartography of power"
-              onclick="cartepower()"
-              disabled="disabled"
-              style="width: 98%"
-            />
-          </div>
-          <div>
-            <input
-              type="button"
-              class="btn"
-              id="carteinterference"
-              value="Cartography of C/I"
-              onclick="carteinterference()"
-              disabled="disabled"
-              style="width: 98%"
-            />
-          </div>
-          <div>
-            <input
-              type="button"
-              class="btn"
-              id="cartehandover"
-              value="Cartography of handover"
-              onclick="mapHandover()"
-              disabled="disabled"
-              style="width: 98%"
-            />
-          </div>
-          <div>
-            <input
-              type="button"
-              class="btn"
-              id="carteCell"
-              value="Cartography of Cells"
-              onclick="carteCell()"
-              disabled="disabled"
-              style="width: 98%"
-            />
-          </div>
-          <div>
-            <input
-              type="button"
-              class="btn"
-              id="carteresidence"
-              value="Residance time"
-              onclick="carteresidence()"
-              disabled="disabled"
-              style="width: 98%"
-            />
-          </div>
-          <div id="frameantenna">
-            <label id="labomni">Omni : </label>
-            <input type="radio" name="omni" id="omni" value="omni" />
-            <label id="labsect">Sectorielle : </label>
-            <input type="radio" name="omni" id="sect" value="sectorial" />
-            <div><label id="labelpower">Puissance rayonnée: </label></div>
+            <div><label id="labeltech">Radio technogy: </label></div>
+            <select class="select" name="Combobox1" size="1" id="techno">
+                <option selected value="1">GSM</option>
+                <option value="2">UMTS</option>
+                <option value="3">LTE</option>
+                <option value="4">TDF</option>
+                <option value="5">HSDPA</option>
+                <option value="6">WiMAX</option>
+            </select>
             <div>
-              <input
-                type="number"
-                class="number-input"
-                id="power"
-                name="power"
-                value="30"
-                style="width: 98%"
-              />
+                <label id="labelfrequencySpectrum" style="width: 50%"
+                >Band(Mhz) : </label
+                ><input
+                    type="number"
+                    class="number-input"
+                    id="frequencySpectrum"
+                    name="frequencySpectrum"
+                    value="1800"
+                    align="right"
+                    style="width: 50%"
+            />
             </div>
-            <div><label id="labeltilt">Tilt : </label></div>
             <div>
-              <input
-                type="number"
-                class="number-input"
-                id="tilt"
-                name="tilt"
-                value="30"
-                style="width: 98%"
-              />
+                <label id="labelqualityThreshold" style="width: 50%"
+                >Quality Threshold (Db) : </label
+                ><input
+                    type="number"
+                    class="number-input"
+                    id="qualityThreshold"
+                    name="qualityThreshold"
+                    value="-100"
+                    style="width: 50%"
+            />
             </div>
-            <div><label id="labelazimut">Azimut : </label></div>
             <div>
-              <input
-                type="number"
-                class="number-input"
-                id="azimut"
-                name="azimut"
-                value="0"
-                style="width: 98%"
-              />
+                <label id="labelareaHeight " style="width: 30%"
+                >Area Height (10m) : </label
+                ><input
+                    type="number"
+                    class="number-input"
+                    id="areaHeight "
+                    name="areaHeight "
+                    value="200"
+                    style="width: 20%"
+            />
             </div>
-            <div><label id="freq1">Fréquence 1 : </label></div>
             <div>
-              <input
-                type="number"
-                class="number-input"
-                id="frequency1"
-                name="frequency1"
-                style="width: 98%"
-              />
+                <label id="labelareaWidth " style="width: 30%"
+                >Area Width (10m) : </label
+                ><input
+                    type="number"
+                    class="number-input"
+                    id="areaWidth "
+                    name="areaWidth "
+                    value="200"
+                    style="width: 20%"
+            />
             </div>
-            <div><label id="freq1">Fréquence 2 : </label></div>
+            <div><label id="labelmodele">Propagation model: </label></div>
+            <select
+                    class="select"
+                    name="Combobox1"
+                    size="1"
+                    id="methode"
+                    onchange="choixenv()"
+            >
+                <option selected value="1">Single Knife Edge (rural)</option>
+                <option value="2">Bullington (rural)</option>
+                <option value="3">Epstein Method</option>
+                <option value="4">Deygout (rural)</option>
+                <option value="5">Causebrook</option>
+                <option value="6">Okumura</option>
+                <option value="7">Okumura-Hata</option>
+                <option value="8">COST231-Hata (rural,urban)</option>
+                <option value="9">Walfisch-Ikegami(urban)</option>
+                <option value="10">Stanford University Interim</option>
+            </select>
             <div>
-              <input
-                type="number"
-                class="number-input"
-                id="frequency2"
-                name="frequency2"
-                style="width: 98%"
-              />
+                <input
+                        type="button"
+                        class="btn"
+                        id="cartepower"
+                        value="Cartography of power"
+                        onclick="cartepower()"
+                        disabled="disabled"
+                        style="width: 98%"
+                />
             </div>
-            <div><label id="freq1">Fréquence 3 : </label></div>
             <div>
-              <input
-                type="number"
-                class="number-input"
-                id="frequency3"
-                name="frequency3"
-                style="width: 98%"
-              />
+                <input
+                        type="button"
+                        class="btn"
+                        id="carteinterference"
+                        value="Cartography of C/I"
+                        onclick="carteinterference()"
+                        disabled="disabled"
+                        style="width: 98%"
+                />
             </div>
-            <div><label id="freq1">Fréquence 4 : </label></div>
             <div>
-              <input
-                type="number"
-                class="number-input"
-                id="frequency4"
-                name="frequency4"
-                style="width: 98%"
-              />
+                <input
+                        type="button"
+                        class="btn"
+                        id="cartehandover"
+                        value="Cartography of handover"
+                        onclick="mapHandover()"
+                        disabled="disabled"
+                        style="width: 98%"
+                />
             </div>
-          </div>
+            <div>
+                <input
+                        type="button"
+                        class="btn"
+                        id="carteCell"
+                        value="Cartography of Cells"
+                        onclick="carteCell()"
+                        disabled="disabled"
+                        style="width: 98%"
+                />
+            </div>
+            <div>
+                <input
+                        type="button"
+                        class="btn"
+                        id="carteresidence"
+                        value="Residance time"
+                        onclick="carteresidence()"
+                        disabled="disabled"
+                        style="width: 98%"
+                />
+            </div>
+            <div id="frameantenna">
+                <label id="labomni">Omni : </label>
+                <input type="radio" name="omni" id="omni" value="omni"/>
+                <label id="labsect">Sectorielle : </label>
+                <input type="radio" name="omni" id="sect" value="sectorial"/>
+                <div><label id="labelpower">Puissance rayonnée: </label></div>
+                <div>
+                    <input type="number"
+                           class="number-input"
+                           id="power"
+                           name="power"
+                           value="30"
+                           style="width: 98%"/>
+                </div>
+                <div><label id="labeltilt">Tilt : </label></div>
+                <div>
+                    <input type="number"
+                           class="number-input"
+                           id="tilt"
+                           name="tilt"
+                           value="30"
+                           style="width: 98%"/>
+                </div>
+                <div><label id="labelazimut">Azimut : </label></div>
+                <div>
+                    <input type="number"
+                           class="number-input"
+                           id="azimut"
+                           name="azimut"
+                           value="0"
+                           style="width: 98%"/>
+                </div>
+                <div><label id="freq1">Fréquence 1 : </label></div>
+                <div>
+                    <input type="number"
+                           class="number-input"
+                           id="frequency1"
+                           name="frequency1"
+                           style="width: 98%"/>
+                </div>
+                <div><label id="freq2">Fréquence 2 : </label></div>
+                <div>
+                    <input type="number"
+                           class="number-input"
+                           id="frequency2"
+                           name="frequency2"
+                           style="width: 98%"/>
+                </div>
+                <div><label id="freq3">Fréquence 3 : </label></div>
+                <div>
+                    <input type="number"
+                           class="number-input"
+                           id="frequency3"
+                           name="frequency3"
+                           style="width: 98%"/>
+                </div>
+                <div><label id="freq4">Fréquence 4 : </label></div>
+                <div>
+                    <input type="number"
+                           class="number-input"
+                           id="frequency4"
+                           name="frequency4"
+                           style="width: 98%"/>
+                </div>
+            </div>
         </div>
         <div id="contenu" class="content">
-          <div id="mapid" class="map"></div>
+            <div id="mapid" class="map"></div>
         </div>
-      </div>
+    </div>
 
-      <div id="footer" class="footer">
-        <button
-          id="propag"
-          value="Propagation"
-          onclick="propagation()"
-          disabled="disabled"
-        >
-          <img src="propag.png" />
+    <div id="footer" class="footer">
+        <button id="propag"
+                value="Propagation"
+                onclick="propagation()"
+                disabled="disabled">
+            <img src="propag.png"/>
         </button>
         <button id="remove" value="Remove" onclick="vider()">
-          <img src="effacer.png" />
+            <img src="effacer.png"/>
         </button>
-        <button
-          id="routes"
-          value="Extraire les routes de la zone (0,0)"
-          onclick="routes()"
-          disabled="disabled"
-        >
-          <img src="routes.png" />
+        <button id="routes"
+                value="Extraire les routes de la zone (0,0)"
+                onclick="routes()"
+                disabled="disabled">
+            <img src="routes.png"/>
         </button>
-        <button
-          id="completer"
-          value="Compléter les routes"
-          onclick="completer()"
-          disabled="disabled"
-        >
-          <img src="routes+.png" />
+        <button id="completer"
+                value="Compléter les routes"
+                onclick="completer()"
+                disabled="disabled">
+            <img src="routes+.png"/>
         </button>
-        <button
-          id="axes"
-          value="Ajouter un axe routier"
-          onclick="addaxe()"
-          disabled="disabled"
-        >
-          <img src="routes.png" />
+        <button id="axes"
+                value="Ajouter un axe routier"
+                onclick="addaxe()"
+                disabled="disabled">
+            <img src="routes.png"/>
         </button>
-        <button
-          id="batiment"
-          value="Add a building"
-          onclick="batiment()"
-          disabled="disabled"
-        >
-          <img src="bat.png" />
+        <button id="batiment"
+                value="Add a building"
+                onclick="batiment()"
+                disabled="disabled">
+            <img src="bat.png"/>
         </button>
-        <button
-          id="saveBat"
-          value="Record buildings"
-          onclick="saveNet()"
-          disabled="disabled"
-        >
-          <img src="saveNet.png" />
+        <button id="saveBat"
+                value="Record buildings"
+                onclick="saveNet()"
+                disabled="disabled">
+            <img src="saveNet.png"/>
         </button>
-        <button
-          id="loadBat"
-          value="Load buildings"
-          onclick="loadNet()"
-          disabled="disabled"
-        >
-          <img src="loadNet.png" />
+        <button id="loadBat"
+                value="Load buildings"
+                onclick="loadNet()"
+                disabled="disabled">
+            <img src="loadNet.png"/>
         </button>
-        <button
-          id="antenne"
-          value="Add an antenna"
-          onclick="addAntennaConstructor()"
-          disabled="disabled"
-        >
-          <img src="antenna.png" />
+        <button id="antenne"
+                value="Add an antenna"
+                onclick="addAntennaConstructor()"
+                disabled="disabled">
+            <img src="antenna.png"/>
         </button>
-        <button
-          id="ecole"
-          value="Add a critical zone "
-          onclick="addEcole()"
-          disabled="disabled"
-        >
-          <img src="ecole.png" />
+        <button id="ecole"
+                value="Add a critical zone "
+                onclick="addEcole()"
+                disabled="disabled">
+            <img src="ecole.png"/>
         </button>
-        <button
-          id="elevation"
-          value="Elevation computing"
-          onclick="displayElevation()"
-          disabled="disabled"
-        >
-          <img src="elevation.png" />
+        <button id="elevation"
+                value="Elevation computing"
+                onclick="displayElevation()"
+                disabled="disabled">
+            <img src="elevation.png"/>
         </button>
 
         <!-- Path creation and activation part -->
-        <button
-          id="createPath"
-          title="Create a path for cell selection"
-          onclick="onCratePathClick()"
-          disabled="disabled"
-        >
-          <img src="route.png" />
+        <button id="createPath"
+                title="Create a path for cell selection"
+                onclick="onCratePathClick()"
+                disabled="disabled">
+            <img src="route.png"/>
+        </button>
+        <button title="Finish Path Creation"
+                class="path-action-invisible"
+                id="finishPathCreation"
+                onclick="finishPathCreation()"
+                disabled="disabled">
+            <img src="finish.jpg"/>
         </button>
         <button
-          title="Finish Path Creation"
-          class="path-action-invisible"
-          id="finishPathCreation"
-          onclick="finishPathCreation()"
-          disabled="disabled"
-        >
-          <img src="finish.jpg" />
+                title="Cancel Path Creation"
+                class="path-action-invisible"
+                id="cancelPathCreation"
+                onclick="cancelPathCreation()">
+            <img src="cancel.png"/>
         </button>
-        <button
-          title="Cancel Path Creation"
-          class="path-action-invisible"
-          id="cancelPathCreation"
-          onclick="cancelPathCreation()"
-        >
-          <img src="cancel.png" />
+        <button title="Start Mobile Movement"
+                class="path-action-invisible pulse-button"
+                id="startMobileMovement"
+                onclick="startMobileMovement()">
+            <img src="start.jpg"/>
         </button>
-        <button
-          title="Start Mobile Movement"
-          class="path-action-invisible pulse-button"
-          id="startMobileMovement"
-          onclick="startMobileMovement()"
-        >
-          <img src="start.jpg" />
+        <button title="Pause Mobile Movement"
+                class="path-action-invisible"
+                id="pauseMobileMovement"
+                onclick="pauseMobileMovement()">
+            <img src="pause-button.png"/>
         </button>
         <div>
-          <label for="file" class="footer-file-upload">
-            <i class="fa fa-cloud-upload"></i> Choose a file
-          </label>
-          <input type="file" id="fileinput" />
+            <label for="file" class="footer-file-upload">
+                <i class="fa fa-cloud-upload"></i> Choose a file
+            </label>
+            <input type="file" id="fileinput"/>
         </div>
-      </div>
     </div>
-  </body>
-  <script>
+</div>
+</body>
+<script>
     L.mapbox.accessToken =
-      "pk.eyJ1IjoiaG1hYmVkIiwiYSI6ImNrbzhtdHZ3MDBtaGkybm1xbGc5OGR1dTkifQ.V0tUwrR-NO6M6dXLKXycAw";
+        "pk.eyJ1IjoiaG1hYmVkIiwiYSI6ImNrbzhtdHZ3MDBtaGkybm1xbGc5OGR1dTkifQ.V0tUwrR-NO6M6dXLKXycAw";
 
     var mapboxTiles = L.tileLayer(
-      "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=" +
+        "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=" +
         L.mapbox.accessToken,
-      {
-        attribution:
-          '© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        tileSize: 512,
-        zoomOffset: -1,
-      }
+        {
+            attribution:
+                '© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            tileSize: 512,
+            zoomOffset: -1,
+        }
     );
 
     mymap = L.map("mapid")
-      .addLayer(mapboxTiles)
-      .setView([47.094818, 5.491389], 14);
+        .addLayer(mapboxTiles)
+        .setView([47.094818, 5.491389], 14);
 
     colorPicker = L.tileLayer
-      .colorPicker(
-        "https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=" +
-          L.mapbox.accessToken,
-        {
-          attribution:
-            'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-          maxZoom: 18,
-          id: "mapbox.outdoors",
-          accessToken: "your mapbox accesstoken",
-        }
-      )
-      .addTo(mymap)
-      .setOpacity(0); // optional
+        .colorPicker(
+            "https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=" +
+            L.mapbox.accessToken,
+            {
+                attribution:
+                    'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: "mapbox.outdoors",
+                accessToken: "your mapbox accesstoken",
+            }
+        )
+        .addTo(mymap)
+        .setOpacity(0); // optional
 
     mymap.on("click", onMapClick);
     mymap.on("dblclick", onMapDbClick);
     frameantenna = document.getElementById("frameantenna");
     frameantenna.style.visibility = "hidden";
-  </script>
+</script>
 </html>
