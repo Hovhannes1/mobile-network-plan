@@ -1766,29 +1766,34 @@ function mapHandover() {
 
     for (i = 0; i < areaHeight; i++) {
         for (j = 0; j < areaWidth; j++) {
-            //create array with nbantennas.length filled with -1000
-            let maxList = new Array(nbantennas).fill(-1000);
+            //create array with nbantennas size as length and filled with -1000
+            let arrOfAntennas = new Array(nbantennas).fill(-1000);
+            // loop over antennas and check if the power of antenna at this i,j point is granter than one in arrOfAntennas
+            // if so save the value in arrOfAntennas
             for (let a = 0; a < nbantennas; a++) {
-                if (power[a][i][j] > maxList[a]) maxList[a] = power[a][i][j];
+                if (power[a][i][j] > arrOfAntennas[a]) arrOfAntennas[a] = power[a][i][j];
             }
-            // check if the max is smaller than the threshold
-            let validMax = 0;
-            let max = -1000;
-            for (let ind = 0; ind < maxList.length; ind++) {
-                // find the biggest value
-                if (maxList[ind] > qualityThreshold) {
-                    if (maxList[ind] > max) {
-                        max = maxList[ind];
 
+            let availableAntennasCount = 0;
+            let max = -1000;
+            // loop over arrOfAntennas and
+            for (let ind = 0; ind < arrOfAntennas.length; ind++) {
+                // check if the power is bigger than the threshold
+                if (arrOfAntennas[ind] > qualityThreshold) {
+                    // check to find most powerful antenna at this point
+                    let handoverGap = 8;
+                    if (arrOfAntennas[ind] > max + handoverGap) {
+                        max = arrOfAntennas[ind];
                         //fill the cellHandoverMatrix with the antenna index
                         cellHandoverMatrix[i][j] = ind;
                     }
-                    validMax++;
+                    availableAntennasCount++;
                 }
             }
-            if (validMax === 0) {
+            // draw on map
+            if (availableAntennasCount === 0) {
                 continue;
-            } else if (validMax === 1) {
+            } else if (availableAntennasCount === 1) {
                 colorToSet = "rgba(40,50,255,0.69)";
             } else {
                 colorToSet = "rgba(88,235,88,0.67)";
@@ -1985,6 +1990,20 @@ function getPathLength() {
     return totalDistance;
 }
 
+// calculate the total distance in KM of pathPolylinePoints
+function getPathLengthKM() {
+    let totalDistance = 0;
+
+    for (let i = 0; i < pathPolylinePoints.length - 1; i++) {
+        // calculate the distance between two points using the Haversine formula
+        totalDistance +=
+            L.latLng(pathPolylinePoints[i][0], pathPolylinePoints[i][1]).distanceTo(
+                L.latLng(pathPolylinePoints[i + 1][0], pathPolylinePoints[i + 1][1])
+            ) / 1000;
+    }
+    return totalDistance;
+}
+
 // function that gets the index of the cell that is closest to the mobile position
 function getCellIndex(location) {
     let southCornerLat = southCorner.lat;
@@ -2040,25 +2059,23 @@ async function moveMobile() {
     // create a line connecting the mobile to antenna
     let mobileToAntennaLine;
     // calculate the avarage speed
-    let time = 300;
-    let avgSpeed = getPathLength() / time;
+    let speedKMh;
+    do{
+        speedKMh = parseInt(window.prompt("Please enter speed for mobile in km/h. A number from 1 to 240"), 10);
+    } while (isNaN(speedKMh) || speedKMh >= 240 || speedKMh < 1);
+    let avgSpeed = (getPathLength() * speedKMh / 3600) / getPathLengthKM();
+
     // check if the mobile marker is not already at the end of the path
-    while (
-        startPointMobile.getLatLng().lat !==
-        pathPolylinePoints[pathPolylinePoints.length - 1][0] &&
-        startPointMobile.getLatLng().lng !==
-        pathPolylinePoints[pathPolylinePoints.length - 1][1]
-        ) {
+    while (startPointMobile.getLatLng().lat !== pathPolylinePoints[pathPolylinePoints.length - 1][0] &&
+    startPointMobile.getLatLng().lng !== pathPolylinePoints[pathPolylinePoints.length - 1][1]) {
         // check if marker not moving stop the loop
         if (isRestarting || isPaused) {
             if (mobileToAntennaLine) pathScreenGroup.removeLayer(mobileToAntennaLine);
             break;
         }
         // calculate dx and dy from startPointMobile to the next point
-        let dx =
-            pathPolylinePoints[currentCheckPointIndex + 1][0] - startPointMobile.getLatLng().lat;
-        let dy =
-            pathPolylinePoints[currentCheckPointIndex + 1][1] - startPointMobile.getLatLng().lng;
+        let dx = pathPolylinePoints[currentCheckPointIndex + 1][0] - startPointMobile.getLatLng().lat;
+        let dy = pathPolylinePoints[currentCheckPointIndex + 1][1] - startPointMobile.getLatLng().lng;
 
         // calculate the angle of the line
         let angle = Math.atan2(dy, dx);
@@ -2068,24 +2085,14 @@ async function moveMobile() {
 
         //check if the distance between current possition and the new possition is more than
         //the distance between the current possition and the next checkpoint
-        let distanceBetweenInitialPosAndCheckpoint = Math.sqrt(
-            Math.pow(
-                startPointMobile.getLatLng().lat - pathPolylinePoints[currentCheckPointIndex + 1][0],
-                2
-            ) +
-            Math.pow(
-                startPointMobile.getLatLng().lng - pathPolylinePoints[currentCheckPointIndex + 1][1],
-                2
-            )
-        );
+        let distanceBetweenInitialPosAndCheckpoint =
+            Math.sqrt(Math.pow(startPointMobile.getLatLng().lat - pathPolylinePoints[currentCheckPointIndex + 1][0], 2) +
+                Math.pow(startPointMobile.getLatLng().lng - pathPolylinePoints[currentCheckPointIndex + 1][1], 2));
         let distanceBetweenInitialPosAndNewPos = Math.sqrt(
             Math.pow(startPointMobile.getLatLng().lat - newLat, 2) +
             Math.pow(startPointMobile.getLatLng().lng - newLng, 2)
         );
-        if (
-            distanceBetweenInitialPosAndCheckpoint <
-            distanceBetweenInitialPosAndNewPos
-        ) {
+        if (distanceBetweenInitialPosAndCheckpoint < distanceBetweenInitialPosAndNewPos) {
             // move the marker to the next checkpoint
             startPointMobile.setLatLng([
                 pathPolylinePoints[currentCheckPointIndex + 1][0],
@@ -2118,7 +2125,7 @@ async function moveMobile() {
             }
         }
 
-        if(!mobileDataEnabled) {
+        if (!mobileDataEnabled) {
             if (mobileToAntennaLine) pathScreenGroup.removeLayer(mobileToAntennaLine);
         }
 
